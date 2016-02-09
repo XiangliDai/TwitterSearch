@@ -4,6 +4,7 @@ package ifwe.twittersearch.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.View;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -45,12 +46,13 @@ public class SearchFragment extends TwitterBaseFragment {
             public void success(Result<Search> result) {
                 tweetAdapter.addAll(result.data.tweets);
                 tweetAdapter.notifyDataSetChanged();
+                pb.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void failure(TwitterException e) {
                 Log.d(SearchFragment.class.getName(), "get timeline failed:" + e.getMessage());
-
+                pb.setVisibility(View.INVISIBLE);
             }
         });
     }

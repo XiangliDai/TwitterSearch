@@ -2,6 +2,7 @@ package ifwe.twittersearch.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -47,12 +48,13 @@ public class TimelineFragment extends TwitterBaseFragment {
                 Log.d(TimelineFragment.class.getName(), "tweetArrayList size:" + tweetArrayList.size());
                 tweetAdapter.addAll(tweetArrayList);
                 tweetAdapter.notifyDataSetChanged();
+                pb.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void failure(TwitterException e) {
                 Log.d(TimelineFragment.class.getName(), "get timeline failed:" + e.getMessage());
-
+                pb.setVisibility(View.INVISIBLE);
             }
         });
       }
