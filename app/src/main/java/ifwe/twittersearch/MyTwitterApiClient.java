@@ -7,9 +7,18 @@ import ifwe.twittersearch.clients.SearchTimeLineService;
 import ifwe.twittersearch.clients.TimeLineService;
 
 public class MyTwitterApiClient extends TwitterApiClient {
-
-    public MyTwitterApiClient(TwitterSession session) {
+    public static MyTwitterApiClient client;
+    private MyTwitterApiClient(TwitterSession session) {
         super(session);
+    }
+
+    public static MyTwitterApiClient getInstance(){
+        if(client == null){
+            TwitterSession session = MyTwitterSession.getInstance().getSession();
+
+            client = new MyTwitterApiClient(session);
+        }
+        return client;
     }
     /**
      * Provide user timeline with defined endpoints

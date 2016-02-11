@@ -9,13 +9,9 @@ import android.view.View;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.Search;
 
-import ifwe.twittersearch.MyTwitterApiClient;
-import ifwe.twittersearch.MyTwitterSession;
 import ifwe.twittersearch.R;
-import ifwe.twittersearch.clients.SearchTimeLineService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,30 +27,21 @@ public class SearchFragment extends TwitterBaseFragment {
         return fragment;
     }
 
-    public SearchFragment() {
-        // Required empty public constructor
+
+    @Override
+    int getFragmentId() {
+        return R.layout.fragment_search;
+    }
+
+    @Override
+    protected void getOlderTweetList() {
+        searchTimeLineService.showOlder(query, maxId, getSearchCallback());
+
     }
 
     @Override
     protected void getTweetList() {
-        TwitterSession session = MyTwitterSession.getInstance().getSession();
-        MyTwitterApiClient twitterApiClient = new MyTwitterApiClient(session);
-        SearchTimeLineService searchTimeLineService = twitterApiClient.getSearchTimeLineService();
-        searchTimeLineService.show(query, new Callback<Search>() {
-
-            @Override
-            public void success(Result<Search> result) {
-                tweetAdapter.addAll(result.data.tweets);
-                tweetAdapter.notifyDataSetChanged();
-                pb.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void failure(TwitterException e) {
-                Log.d(SearchFragment.class.getName(), "get timeline failed:" + e.getMessage());
-                pb.setVisibility(View.INVISIBLE);
-            }
-        });
+        searchTimeLineService.show(query, getSearchCallback());
     }
 
     @Override
@@ -63,8 +50,26 @@ public class SearchFragment extends TwitterBaseFragment {
         if (getArguments() != null) {
             this.query = getArguments().getString("query");
         }
-        this.fragmentId = R.layout.fragment_search;
     }
+    private Callback<Search> searchCallback;
+    protected Callback<Search> getSearchCallback() {
+        if(searchCallback == null){
+        searchCallback = new Callback<Search>() {
+        @Override
+        public void success(Result<Search> result) {
+            tweetAdapter.addAll(result.data.tweets);
+            pb.setVisibility(View.INVISIBLE);
+            maxId = result.data.tweets.get(result.data.tweets.size() - 1).getId();
 
+        }
 
+        @Override
+        public void failure(TwitterException e) {
+            Log.d(SearchFragment.class.getName(), "get search result failed:" + e.getMessage());
+            pb.setVisibility(View.INVISIBLE);
+        }
+    };
+        }
+        return  searchCallback;
+    }
 }

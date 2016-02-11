@@ -13,5 +13,8 @@ public interface TimeLineService{
     void getUserTimeLine(@Query("user_id") long id, Callback<Collection<Tweet>> cb);
 
     @GET("/1.1/statuses/home_timeline.json")
-    void getHomeTimeLine(Callback<Collection<Tweet>> cb);
+    void getHomeTimeLine(@Query("count") int count, Callback<Collection<Tweet>> cb);
+    @GET("/1.1/statuses/home_timeline.json")
+    void getOlderHomeTimeLine(@Query("count") int count, @Query("max_id") long maxId, Callback<Collection<Tweet>> cb);
+
 }

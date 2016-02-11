@@ -9,58 +9,83 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.twitter.sdk.android.core.models.Tweet;
 
+import java.util.ArrayList;
+
+import ifwe.twittersearch.EndlessScrollListener;
+import ifwe.twittersearch.MyTwitterApiClient;
 import ifwe.twittersearch.R;
 import ifwe.twittersearch.TweetAdapter;
 import ifwe.twittersearch.Utils;
+import ifwe.twittersearch.clients.SearchTimeLineService;
+import ifwe.twittersearch.clients.TimeLineService;
 
 
 public abstract class TwitterBaseFragment extends Fragment {
     private static final int REQUEST_CODE = 10;
 
     protected ListView lvList;
-    protected List<com.twitter.sdk.android.core.models.Tweet> tweetList;
     protected SwipeRefreshLayout swipeContainer;
     protected TweetAdapter tweetAdapter;
-    protected int fragmentId;
-    protected ProgressBar pb;
 
-    public TwitterBaseFragment() {
-        // Required empty public constructor
+    protected long maxId;
+
+    abstract int getFragmentId();
+
+    protected ProgressBar pb;
+    protected TimeLineService timeLineService;
+    protected SearchTimeLineService searchTimeLineService;
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        getActivity().getWindow().setBackgroundDrawableResource(R.color.white);
+         timeLineService =  MyTwitterApiClient.getInstance().getTimeLineService();
+        searchTimeLineService = MyTwitterApiClient.getInstance().getSearchTimeLineService();
+        tweetAdapter = new TweetAdapter(getActivity(), new ArrayList<Tweet>(), null);
+        lvList.setAdapter(tweetAdapter);
+        lvList.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                getOlderTweetList();
+            }
+        });
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getTweetList();
+                //  TODO get newer tweet;
+            }
+        });
+
+        if(Utils.isNetworkAvailable(getActivity())) {
+            getTweetList();
+
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(fragmentId, container, false);
+        View view = inflater.inflate(getFragmentId(), container, false);
         pb = (ProgressBar) view.findViewById(R.id.progressBar);
         pb.setVisibility(View.VISIBLE);
         lvList = (ListView) view.findViewById(R.id.lvList);
-        tweetList = new ArrayList<>();
-        tweetAdapter = new TweetAdapter(getActivity(), tweetList, null);
-        lvList.setAdapter(tweetAdapter);
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-              //  TODO get newer tweet;
-            }
-        });
+
 
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-         if(Utils.isNetworkAvailable(getActivity())) {
-             getTweetList();
 
-        }
         return view;
     }
+
+    protected abstract void getOlderTweetList();
 
 
     abstract protected void getTweetList();

@@ -7,17 +7,15 @@ import android.view.View;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.models.Tweet;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ifwe.twittersearch.MyTwitterApiClient;
-import ifwe.twittersearch.MyTwitterSession;
 import ifwe.twittersearch.R;
-import ifwe.twittersearch.clients.TimeLineService;
 
 public class TimelineFragment extends TwitterBaseFragment {
+    private static int COUNT = 20;
 
     public static TimelineFragment newInstance() {
         TimelineFragment fragment = new TimelineFragment();
@@ -25,38 +23,50 @@ public class TimelineFragment extends TwitterBaseFragment {
         return fragment;
     }
 
-    public TimelineFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);      
-        this.fragmentId = R.layout.fragment_timeline;
+        super.onCreate(savedInstanceState);
+
     }
 
     @Override
+    int getFragmentId() {
+        return R.layout.fragment_timeline;
+    }
+
+
+    @Override
+    protected void getOlderTweetList() {
+        Log.d(TimelineFragment.class.getName(), "maxId: " + maxId);
+        timeLineService.getOlderHomeTimeLine(COUNT, maxId, getTweetCallback());
+    }
+
+
+    private Callback<Collection<Tweet>> tweetCallback;
+    protected Callback<Collection<Tweet>> getTweetCallback() {
+        if (tweetCallback == null) {
+            tweetCallback = new Callback<Collection<com.twitter.sdk.android.core.models.Tweet>>() {
+                @Override
+                public void success(Result<Collection<Tweet>> result) {
+                    ArrayList<Tweet> tweetArrayList = (ArrayList<com.twitter.sdk.android.core.models.Tweet>) result.data;
+                    Log.d(TimelineFragment.class.getName(), "tweetArrayList size:" + tweetArrayList.size());
+                    maxId = tweetArrayList.get(tweetArrayList.size() - 1).getId();
+                    tweetAdapter.addAll(tweetArrayList);
+                   pb.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void failure(TwitterException e) {
+                    Log.d(TimelineFragment.class.getName(), "get timeline failed:" + e.getMessage());
+                    pb.setVisibility(View.INVISIBLE);
+                }
+            };
+        }
+        return tweetCallback;
+    }
+    @Override
     protected void getTweetList() {
-
-        TwitterSession session = MyTwitterSession.getInstance().getSession();
-        MyTwitterApiClient twitterApiClient = new MyTwitterApiClient(session);
-        TimeLineService timeLineService = twitterApiClient.getTimeLineService();
-        timeLineService.getHomeTimeLine(new Callback<Collection<com.twitter.sdk.android.core.models.Tweet>>() {
-            @Override
-            public void success(Result<Collection<com.twitter.sdk.android.core.models.Tweet>> result) {
-                ArrayList<com.twitter.sdk.android.core.models.Tweet> tweetArrayList = (ArrayList<com.twitter.sdk.android.core.models.Tweet>) result.data;
-                Log.d(TimelineFragment.class.getName(), "tweetArrayList size:" + tweetArrayList.size());
-                tweetAdapter.addAll(tweetArrayList);
-                tweetAdapter.notifyDataSetChanged();
-                pb.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void failure(TwitterException e) {
-                Log.d(TimelineFragment.class.getName(), "get timeline failed:" + e.getMessage());
-                pb.setVisibility(View.INVISIBLE);
-            }
-        });
+        timeLineService.getHomeTimeLine(COUNT, getTweetCallback());
       }
 
 }

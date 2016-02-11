@@ -24,11 +24,17 @@ public class TimelineActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Home Timeline");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        Fragment fragment = TimelineFragment.newInstance();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_placeholder, fragment)
-                .commit();
+        if(getSupportFragmentManager().findFragmentById(R.id.fragment_placeholder) == null) {
+
+            Fragment fragment = TimelineFragment.newInstance();
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_placeholder, fragment)
+                    .commit();
+
+
+        }
     }
     
     @Override

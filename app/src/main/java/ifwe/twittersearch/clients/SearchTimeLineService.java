@@ -9,4 +9,7 @@ import retrofit.http.Query;
 public interface SearchTimeLineService{
     @GET("/1.1/search/tweets.json")
     void show(@Query("q") String query, Callback<Search> cb);
+
+    @GET("/1.1/search/tweets.json")
+    void showOlder(@Query("q") String query, @Query("max_id") long maxId, Callback<Search> cb);
 }

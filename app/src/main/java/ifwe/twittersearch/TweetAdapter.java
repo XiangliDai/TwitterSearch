@@ -78,7 +78,7 @@ private Context context;
             viewHolder.tvRetweeted.setVisibility(View.GONE);
 
         }
-        if(tweet.favoriteCount > 0) {
+        if(tweet.favoriteCount != null && tweet.favoriteCount > 0) {
             viewHolder.tvlikes.setText(tweet.favoriteCount + "");
         }else{
             viewHolder.tvlikes.setText("");
