@@ -1,4 +1,4 @@
-package ifwe.twittersearch;
+package demo.twittersearch.adapters;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,10 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.models.Tweet;
 
 import java.util.List;
 
-public class TweetAdapter extends ArrayAdapter<com.twitter.sdk.android.core.models.Tweet> {
+import demo.twittersearch.R;
+import demo.twittersearch.Utils;
+
+public class TweetAdapter extends ArrayAdapter<Tweet> {
 
 
 private Context context;
@@ -35,7 +39,7 @@ private Context context;
         public ImageView ivReply;
     }
 
-    public TweetAdapter(Context context, List<com.twitter.sdk.android.core.models.Tweet> tweets, IActionClickListener actionClickListener) {
+    public TweetAdapter(Context context, List<Tweet> tweets, IActionClickListener actionClickListener) {
         super(context, 0, tweets);
         this.context = context;
         this.actionClickListener = actionClickListener;
@@ -44,7 +48,7 @@ private Context context;
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final com.twitter.sdk.android.core.models.Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();

@@ -1,4 +1,4 @@
-package ifwe.twittersearch.activities;
+package demo.twittersearch.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,8 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
-import ifwe.twittersearch.MyTwitterSession;
-import ifwe.twittersearch.R;
+import demo.twittersearch.MyTwitterSession;
+import demo.twittersearch.R;
 import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends AppCompatActivity {
@@ -38,11 +38,14 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(LoginActivity.class.getName(), "we are logged in now!");
 
                 TwitterSession session = Twitter.getSessionManager().getActiveSession();
+                long userId = session.getUserId();
                 TwitterAuthToken authToken = session.getAuthToken();
+                //maybe for later use
                 String token = authToken.token;
                 String secret = authToken.secret;
 
                 MyTwitterSession.getInstance().setSession(session);
+                MyTwitterSession.getInstance().setUserId(userId);
                 Intent intent = new Intent(LoginActivity.this, TimelineActivity.class);
                 startActivity(intent);
 

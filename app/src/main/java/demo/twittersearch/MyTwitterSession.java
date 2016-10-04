@@ -1,4 +1,4 @@
-package ifwe.twittersearch;
+package demo.twittersearch;
 
 import com.twitter.sdk.android.core.TwitterSession;
 
@@ -7,7 +7,7 @@ public class MyTwitterSession {
 
 
     private TwitterSession session;
-
+    private long userId;
     protected MyTwitterSession() {
         // Exists only to defeat instantiation.
     }
@@ -27,4 +27,13 @@ public class MyTwitterSession {
         return this.session;
 
     }
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public long getUserId() {
+        return this.userId;
+
+    }
+
 }

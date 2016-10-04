@@ -1,17 +1,19 @@
-package ifwe.twittersearch.activities;
+package demo.twittersearch.activities;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import ifwe.twittersearch.R;
-import ifwe.twittersearch.fragments.SearchFragment;
+import demo.twittersearch.R;
+import demo.twittersearch.fragments.SearchFragment;
 
 public class SearchActivity extends AppCompatActivity {
     private static String LOG = SearchActivity.class.getName();
@@ -25,12 +27,12 @@ public class SearchActivity extends AppCompatActivity {
         query= getIntent().getStringExtra("query");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.search) + " " + query);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDefaultDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        if(getSupportFragmentManager().findFragmentById(R.id.fragment_placeholder) == null) {
+        if(savedInstanceState == null) {
 
             Fragment fragment = SearchFragment.newInstance(query);
             getSupportFragmentManager()
@@ -49,28 +51,6 @@ public class SearchActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        Log.d(LOG, "onResume");
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        Log.d(LOG, "onPause");
-    }
-    @Override
-    public void onStop(){
-        super.onStop();
-        Log.d(LOG, "onStop");
-    }
-
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        Log.d(LOG, "onDestroy");
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -91,9 +71,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void showDialog() {
-
-
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
@@ -105,7 +83,7 @@ public class SearchActivity extends AppCompatActivity {
                 dialog.cancel();
             }
         });
-        android.app.AlertDialog dialog = builder.create();
+        AlertDialog dialog = builder.create();
         dialog.setTitle(getString(R.string.app_name));
         dialog.setMessage(getString(R.string.search));
         dialog.show();

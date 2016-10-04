@@ -8,7 +8,8 @@
         android:layout_height="@dimen/avatar_size"
         android:layout_marginLeft="@dimen/activity_normal_margin"
         android:layout_marginRight="@dimen/activity_large_margin"
-        android:layout_marginTop="@dimen/activity_large_margin"     
+        android:layout_marginTop="@dimen/activity_large_margin"
+
        />
     <RelativeLayout
         android:id="@+id/rlContent"

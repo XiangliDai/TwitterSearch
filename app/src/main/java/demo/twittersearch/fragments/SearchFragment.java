@@ -1,4 +1,4 @@
-package ifwe.twittersearch.fragments;
+package demo.twittersearch.fragments;
 
 
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.Search;
 
-import ifwe.twittersearch.R;
+import demo.twittersearch.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +36,6 @@ public class SearchFragment extends TwitterBaseFragment {
     @Override
     protected void getOlderTweetList() {
         searchTimeLineService.showOlder(query, maxId, getSearchCallback());
-
     }
 
     @Override
@@ -54,21 +53,20 @@ public class SearchFragment extends TwitterBaseFragment {
     private Callback<Search> searchCallback;
     protected Callback<Search> getSearchCallback() {
         if(searchCallback == null){
-        searchCallback = new Callback<Search>() {
-        @Override
-        public void success(Result<Search> result) {
-            tweetAdapter.addAll(result.data.tweets);
-            pb.setVisibility(View.INVISIBLE);
-            maxId = result.data.tweets.get(result.data.tweets.size() - 1).getId();
+            searchCallback = new Callback<Search>() {
+                @Override
+                public void success(Result<Search> result) {
+                    tweetAdapter.addAll(result.data.tweets);
+                    pb.setVisibility(View.INVISIBLE);
+                    maxId = result.data.tweets.get(result.data.tweets.size() - 1).getId();
+                }
 
-        }
-
-        @Override
-        public void failure(TwitterException e) {
-            Log.d(SearchFragment.class.getName(), "get search result failed:" + e.getMessage());
-            pb.setVisibility(View.INVISIBLE);
-        }
-    };
+                @Override
+                public void failure(TwitterException e) {
+                    Log.d(SearchFragment.class.getName(), "get search result failed:" + e.getMessage());
+                    pb.setVisibility(View.INVISIBLE);
+                }
+            };
         }
         return  searchCallback;
     }

@@ -1,4 +1,4 @@
-package ifwe.twittersearch.fragments;
+package demo.twittersearch.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,13 +13,13 @@ import com.twitter.sdk.android.core.models.Tweet;
 
 import java.util.ArrayList;
 
-import ifwe.twittersearch.EndlessScrollListener;
-import ifwe.twittersearch.MyTwitterApiClient;
-import ifwe.twittersearch.R;
-import ifwe.twittersearch.TweetAdapter;
-import ifwe.twittersearch.Utils;
-import ifwe.twittersearch.clients.SearchTimeLineService;
-import ifwe.twittersearch.clients.TimeLineService;
+import demo.twittersearch.EndlessScrollListener;
+import demo.twittersearch.MyTwitterApiClient;
+import demo.twittersearch.R;
+import demo.twittersearch.adapters.TweetAdapter;
+import demo.twittersearch.Utils;
+import demo.twittersearch.clients.SearchTimeLineService;
+import demo.twittersearch.clients.TimeLineService;
 
 
 public abstract class TwitterBaseFragment extends Fragment {

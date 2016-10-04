@@ -1,4 +1,4 @@
-package ifwe.twittersearch.clients;
+package demo.twittersearch.clients;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.models.Search;

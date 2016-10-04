@@ -1,4 +1,4 @@
-package ifwe.twittersearch;
+package demo.twittersearch;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

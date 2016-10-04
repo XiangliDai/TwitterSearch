@@ -1,10 +1,10 @@
-package ifwe.twittersearch;
+package demo.twittersearch;
 
 import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterSession;
 
-import ifwe.twittersearch.clients.SearchTimeLineService;
-import ifwe.twittersearch.clients.TimeLineService;
+import demo.twittersearch.clients.SearchTimeLineService;
+import demo.twittersearch.clients.TimeLineService;
 
 public class MyTwitterApiClient extends TwitterApiClient {
     public static MyTwitterApiClient client;
